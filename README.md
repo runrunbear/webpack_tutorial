@@ -43,6 +43,36 @@ Webpack 的工作方式是：把你的项目当做一个整体，通过一个给
 
 ### 新建 Webpack 项目
 
+**1.** 创建文件夹
+```
+mkdir webpack_tutorial
+```
+
+**2.** 安装webpack
+```
+//全局安装
+npm install -g webpack
+//安装到你的项目目录
+npm install --save-dev webpack
+```
+
+**3.** 创建package.json
+```
+cd webpack_tutorial
+npm init // just use dufault
+```
+
+**4.** 创建app folder, public folder,  add Greeter.js main.js in app folder, and index.html in public folder
+```
+mkdir app
+mkdir public
+touch app/Greeter.js
+touch app/main.js
+touch public/index.html
+```
+
+
+
 
 
 

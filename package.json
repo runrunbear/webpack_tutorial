@@ -1,0 +1,19 @@
+{
+  "name": "webpack_tutorial",
+  "version": "1.0.0",
+  "description": "最近在学习node，刚开始入门webpack。找到了这个教程，然后手把手做一遍。过程中碰到了一些难题我都标注了出来。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/runrunbear/webpack_tutorial.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/runrunbear/webpack_tutorial/issues"
+  },
+  "homepage": "https://github.com/runrunbear/webpack_tutorial#readme"
+}

@@ -1,3 +1,5 @@
+## 大部分是从 https://github.com/longhuicode/webpack-demo 搬过来的，但是我在本地运行中因为是webpack3.0出现了一些问题，所以我会把出现的问题标出来。还是很感谢博主的分享。
+
 ## Webpack 是什么?
 
 > Webpack 是前端资源模块化管理和打包工具。
@@ -52,14 +54,14 @@ Webpack 的工作方式是：把你的项目当做一个整体，通过一个给
 初步了解 Webpack 后，就可以开始学习使用 Webpack。这里会以一个小的 Demo 为例子来一步一步进行动手学习!
 
 ### 新建 Webpack 项目
-**1.** 新建一个文件夹,命名为 webpack-demo,webpack-demo 就是你的项目名,项目名建议使用小写字母，并且不带空格，不能含有大写字母.
+**1.** 新建一个文件夹,命名为 webpack_tutorial, webpack_tutorial 就是你的项目名,项目名建议使用小写字母，并且不带空格，不能含有大写字母.
 
 **2.** 安装 Webpack,Webpack 可以使用 npm 安装,如果你还不知道 npm 为何物,请 Google,也可以参考 [Node.js 安装配置](http://www.runoob.com/nodejs/nodejs-install-setup.html)和 [NPM 使用介绍](http://www.runoob.com/nodejs/nodejs-npm.html)快速了解、安装 npm.
        
 使用终端在该文件夹中执行下述指令就可以完成安装,由于网络原因安装过程可能需要一些时间。
        
 ```
-//全局安装
+//全局安装 安装全局之后本地就不要package.json 和 node_module
 npm install -g webpack
 //安装到你的项目目录
 npm install --save-dev webpack
@@ -75,7 +77,7 @@ npm init
 
 输入这个命令后，终端会问你一系列诸如项目名称,项目版本,项目描述,入口文件,作者等信息，不过不用担心，如果你不准备在 npm 中发布你的模块，这些问题的答案都不重要，回车默认即可.这些信息今后都可以更改 package.json 来修改,所以不用担心.
 
-**4.** 在 webpack-demo 文件夹中创建两个文件夹 app 文件夹和 public 文件夹, app 文件夹用来存放原始数据,例如: SASS 文件、LESS 文件、JavaScript 模块等，public 文件夹用来存放经过 Webpack 处理过的 app 文件夹数据,这也是准备给浏览器读取的数据,其中包括使用 Webpack 打包后的 js 文件等。在这里还需要在 public 文件夹中创建 index.html 文件.在 app 文件夹中创建 Greeter.js 和 main.js 文件，此时项目结构如下图所示:
+**4.** 在 webpack_tutorial 文件夹中创建两个文件夹 app 文件夹和 public 文件夹, app 文件夹用来存放原始数据,例如: SASS 文件、LESS 文件、JavaScript 模块等，public 文件夹用来存放经过 Webpack 处理过的 app 文件夹数据,这也是准备给浏览器读取的数据,其中包括使用 Webpack 打包后的 js 文件等。在这里还需要在 public 文件夹中创建 index.html 文件.在 app 文件夹中创建 Greeter.js 和 main.js 文件，此时项目结构如下图所示:
 
 ![项目结构](http://upload-images.jianshu.io/upload_images/6171922-cf2a7dd5754319a0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
@@ -142,6 +144,10 @@ module.exports = {
 > 注：__dirname 是 node.js 中的一个全局变量，它指向当前 js 文件所在的目录.
 
 现在只需要在终端里运行 webpack 命令就可以了，这条命令会自动参考 webpack.config.js 文件中的配置选项打包你的项目，输出结果如下:
+这你需要, 安装webpack-cli到全局才可以
+```
+npm install -g webpack-cli
+```
 
 ![终端结果](http://upload-images.jianshu.io/upload_images/6171922-d4ef20b686aa3e30.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
@@ -362,10 +368,10 @@ module.exports = {
         historyApiFallback: true,
     },
     module: {
-        loaders: [{
-            test: /\.json$/,
-            loader: "json-loader"
-        }]
+        rules: [ 
+	// 这里不需要再load json loader了 会报错，check here 
+	//https://webpack.js.org/guides/migrating/#json-loader-is-not-required-anymore
+	]
     }
 }
 
@@ -390,8 +396,10 @@ Babel 其实是几个模块化的包，其核心功能位于称为 babel-core �
 
 ```
 // 利用 npm 一次性安装多个依赖模块，模块之间用空格隔开
-npm install --save-dev babel-core babel-loader babel-preset-es2015 babel-preset-react
-
+// not working anymore
+// npm install --save-dev babel-core babel-loader babel-preset-es2015 babel-preset-react
+// webpack 3.x | babel-loader 8.x | babel 7.x
+npm install "babel-loader@^8.0.0-beta" @babel/core @babel/preset-env webpack
 //安装 React 和 React-DOM
 npm install --save react react-dom
 ```
@@ -416,17 +424,18 @@ module.exports = {
         historyApiFallback: true,
     },
     module: {
-        loaders: [{
-            test: /\.json$/,
-            loader: "json-loader"
-        }, {
-            test: /\.js$/,
-            exclude: /node_modules/, //编译打包时需要排除 node_modules 文件夹
-            loader: "babel-loader",
-            query: {
-                presets: ['es2015', 'react']
-            }
-        }]
+        rules: [
+	    {
+	      test: /\.js$/,
+	      exclude: /(node_modules|bower_components)/,
+	      use: {
+		loader: 'babel-loader',
+		options: {
+		  presets: ['@babel/preset-env']
+		}
+	      }
+	    }
+ 	]
     }
 }
 ```
